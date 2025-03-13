@@ -19,8 +19,9 @@ This Go application sends ICMP pings to a specified target and performs HTTP GET
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/your-repo.git
-   cd your-repo
+   git clone https://github.com/kingAuthor1212/icmp_http_prometheus_metrics.git
+   
+   cd icmp_http_prometheus_metrics
    ```
 
 2. **Install dependencies:**
@@ -49,7 +50,7 @@ To run the application, use the following command:
 ./icmp_http_prometheus_metrics [target]
 ```
 
-Replace target with `[hostname or IP address you want to ping]` If no target is provided, it defaults to `8.8.8.8`.
+Replace target with `hostname or IP address you want to ping` If no target is provided, it defaults to `8.8.8.8`.
 
 Example:
 
@@ -69,8 +70,11 @@ To test the application, follow these steps:
    ```bash
    curl http://localhost:8080/metrics
    ```
+   ```browser
+   http://localhost:8080/metrics
+   ```
 
-You should see metrics related to ICMP ping success and response times, along with HTTP GET metrics.
+You should see metrics related to ICMP ping success and response times.
 
 ## Stopping the Application
 
