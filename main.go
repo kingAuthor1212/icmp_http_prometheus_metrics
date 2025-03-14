@@ -12,7 +12,11 @@ import (
     "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+
 var (
+    /* icmpPingSuccess is a gauge that indicates whether the ICMP ping was successful.
+    It records a value of 1 if the ping was successful else 0.
+    https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#NewGaugeVec*/
     icmpPingSuccess = prometheus.NewGaugeVec(
         prometheus.GaugeOpts{
             Name: "icmp_ping_success",
@@ -20,7 +24,8 @@ var (
         },
         []string{"target"},
     )
-
+     /* icmpPingResponseTime measures the response time of the ICMP ping in seconds.
+     This gauge reflects the time taken for the ping response.*/
     icmpPingResponseTime = prometheus.NewGaugeVec(
         prometheus.GaugeOpts{
             Name: "icmp_ping_response_time",
@@ -30,14 +35,24 @@ var (
     )
 )
 
+// init initializes the metrics for Prometheus monitoring and registers them
 func init() {
     prometheus.MustRegister(icmpPingSuccess)
     prometheus.MustRegister(icmpPingResponseTime)
 }
 
+
+/* ping sends an ICMP echo request (ping) to the specified target IP address or hostname.
+It measures the time taken for the request and updates Prometheus metrics accordingly.
+
+Parameters:
+- target: A string representing the target IP address or hostname to ping.
+ICMP packet handling, https://pkg.go.dev/golang.org/x/net/icmp
+package to resolve IP addresses, https://pkg.go.dev/net#ResolveIPAddr
+package for measuring durations, https://pkg.go.dev/time
+*/
 func ping(target string) {
-    // Listen on all interfaces
-    c, err := icmp.ListenPacket("ip4:icmp", "0.0.0.0")
+    c, err := icmp.ListenPacket("ip4:icmp", "0.0.0.0")  
     if err != nil {
         fmt.Println("Error listening:", err)
         return
@@ -46,7 +61,6 @@ func ping(target string) {
 
     start := time.Now()
 
-    // Prepare the ICMP echo request message
     message := icmp.Message{
         Type: ipv4.ICMPTypeEcho,
         Code: 0,
@@ -57,21 +71,18 @@ func ping(target string) {
         },
     }
 
-    // Marshal the ICMP message
     msgBytes, err := message.Marshal(nil)
     if err != nil {
         fmt.Println("Error marshaling message:", err)
         return
     }
 
-    // Resolve the target IP address
     addr, err := net.ResolveIPAddr("ip4", target)
     if err != nil {
         fmt.Println("Error resolving address:", err)
         return
     }
 
-    // Send the ICMP message
     _, err = c.WriteTo(msgBytes, addr)
     if err != nil {
         fmt.Println("Error writing:", err)
@@ -87,14 +98,20 @@ func ping(target string) {
     if err == nil {
         icmpPingSuccess.WithLabelValues(target).Set(1)
         icmpPingResponseTime.WithLabelValues(target).Set(duration)
-        fmt.Printf("Ping to %s successful, duration: %v seconds\n", target, duration)
+        fmt.Println("Ping to",target ,"in", duration, "seconds")
     } else {
         icmpPingSuccess.WithLabelValues(target).Set(0)
-        fmt.Println("Ping failed:", err)
+        fmt.Println("Ping failed", err)
     }
 }
 
-// https://pkg.go.dev/net/http
+/* httpGet performs an HTTP GET request to the specified URL.
+It measures the time taken for the request and prints the response time.
+
+Parameters:
+- url: A string representing the target URL for the GET request.
+Go net/http package https://pkg.go.dev/net/http
+*/
 func httpGet(url string) {
     startTime := time.Now()
     resp, err := http.Get(url)
@@ -105,20 +122,20 @@ func httpGet(url string) {
     defer resp.Body.Close()
 
     duration := time.Since(startTime).Seconds()
-    fmt.Println("HTTP GET response from",url,"in", duration)
+    fmt.Println("HTTP GET response from",url,"in", duration, "seconds")
 }
 
 func main() {
-    target := "8.8.8.8" // Default target for ICMP ping
+    target := "8.8.8.8"
     if len(os.Args) > 1 {
-        target = os.Args[1] // Accept target as command-line argument
+        target = os.Args[1]
     }
 
     go func() {
         for {
-            ping(target)
-            httpGet("https://www.google.com") // Perform HTTP GET request
-            time.Sleep(5 * time.Second) // Ping every 5 seconds
+            ping(target)// Send ICMP ping to the target
+            httpGet("https://www.google.com") // Perform HTTP GET request to Google
+            time.Sleep(2 * time.Second)  // Wait for 2 seconds before the next iteration
         }
         }()
         

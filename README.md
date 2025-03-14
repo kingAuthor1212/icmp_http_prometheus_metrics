@@ -4,7 +4,7 @@ This Go application sends ICMP pings to a specified target and performs HTTP GET
 
 ## Features
 
-- ICMP Ping to a specified target (default: `8.8.8.8`).
+- ICMP Ping to a specified target.
 - HTTP GET request to `https://www.google.com`.
 - Exposes metrics for ICMP ping success and response time.
 - Metrics are available at the `/metrics` endpoint.
@@ -12,7 +12,6 @@ This Go application sends ICMP pings to a specified target and performs HTTP GET
 ## Prerequisites
 
 - Go installed (version 1.11 or higher).
-- `golang.org/x/net/icmp` and `github.com/prometheus/client_golang/prometheus` libraries.
 
 ## Installation
 
@@ -26,9 +25,11 @@ This Go application sends ICMP pings to a specified target and performs HTTP GET
 
 2. **Install dependencies:**
 
-   Run the following command to get the necessary Go modules:
+   Run the following command to get the necessary Go modules and libraries:
 
    ```bash
+   go get golang.org/x/net/icmp
+   go get github.com/prometheus/client_golang/prometheus
    go mod tidy
    ```
 
