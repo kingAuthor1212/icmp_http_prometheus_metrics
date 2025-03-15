@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt"
+    "strconv"
     "net"
     "net/http"
     "os"
@@ -125,12 +126,20 @@ func httpGet(url string) {
     fmt.Println("HTTP GET response from",url,"in", duration, "seconds")
 }
 
+func checkPort(portStr string) bool {
+    port, err := strconv.Atoi(portStr)
+    if err != nil {
+        return false
+    }
+    return port >= 0 && port <= 65535
+}
+
 func main() {
     target := "8.8.8.8"
     PORT := "8080"
     if len(os.Args) > 1 {
         target = os.Args[1]
-        if len(os.Args)>2{ PORT = os.Args[2] }
+        if len(os.Args)>2 && checkPort(os.Args[2]){PORT = os.Args[2]}
     }
 
     go func() {
