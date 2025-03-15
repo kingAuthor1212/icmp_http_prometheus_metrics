@@ -48,18 +48,18 @@ This will create an executable named `icmp_http_prometheus_metrics`.
 To run the application, use the following command:
 
 ```bash
-./icmp_http_prometheus_metrics [target]
+./icmp_http_prometheus_metrics  <target> <port> 
 ```
 
-Replace target with `hostname or IP address you want to ping` If no target is provided, it defaults to `8.8.8.8`.
+Replace target and port with `hostname or IP address and port nunmber you want` and If no target and port are provided, it defaults to `8.8.8.8` and `8080`.
 
 Example:
 
 ```bash
-./icmp_http_prometheus_metrics 1.1.1.1
+./icmp_http_prometheus_metrics 1.1.1.1 9090
 ```
 
-The application will start an HTTP server on port `8080` and expose the metrics at `/metrics`.
+The application will start an HTTP server on port provided else `8080` and expose the metrics at `/metrics`.
 
 ## Test
 
@@ -69,10 +69,10 @@ To test the application, follow these steps:
 2. Open your web browser or use a tool like `curl` to access the metrics endpoint:
 
    ```bash
-   curl http://localhost:8080/metrics
+   curl http://localhost:<port>/metrics
    ```
    ```browser
-   http://localhost:8080/metrics
+   http://localhost:<port>/metrics
    ```
 
 You should see metrics related to ICMP ping success and response times.

@@ -127,8 +127,10 @@ func httpGet(url string) {
 
 func main() {
     target := "8.8.8.8"
+    PORT := "8080"
     if len(os.Args) > 1 {
         target = os.Args[1]
+        if len(os.Args)>2{ PORT = os.Args[2] }
     }
 
     go func() {
@@ -141,8 +143,8 @@ func main() {
         
 
     http.Handle("/metrics", promhttp.Handler())
-    fmt.Println("Starting server on :8080")
-    if err := http.ListenAndServe(":8080", nil); err != nil {
+    fmt.Println("Starting server on :"+PORT)
+    if err := http.ListenAndServe(":"+PORT, nil); err != nil {
         fmt.Println("Error starting server:", err)
     }
 }
