@@ -1,6 +1,6 @@
 # ICMP Ping and HTTP GET with Prometheus Metrics
 
-This Go application sends ICMP pings to a specified target and performs HTTP GET requests to Google. It records metrics for both operations and exposes them via a Prometheus-compatible HTTP endpoint.
+This Go application sends ICMP pings to a specified target and performs HTTP GET requests to Google. It records metrics for both operations and exposes them via a Prometheus HTTP endpoint.
 
 ## Features
 
