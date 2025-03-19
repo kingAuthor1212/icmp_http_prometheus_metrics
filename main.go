@@ -13,11 +13,11 @@ import (
     "github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-
 var (
     /* icmpPingSuccess is a gauge that indicates whether the ICMP ping was successful.
     It records a value of 1 if the ping was successful else 0.
-    https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#NewGaugeVec*/
+    https://pkg.go.dev/github.com/prometheus/client_golang/prometheus#NewGaugeVec
+    */
     icmpPingSuccess = prometheus.NewGaugeVec(
         prometheus.GaugeOpts{
             Name: "icmp_ping_success",
@@ -117,7 +117,7 @@ func httpGet(url string) {
     startTime := time.Now()
     resp, err := http.Get(url)
     if err != nil {
-        fmt.Println("HTTP GET request failed:", err)
+        fmt.Println("HTTP GE T request failed:", err)
         return
     }
     defer resp.Body.Close()
