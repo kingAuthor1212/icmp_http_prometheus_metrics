@@ -117,7 +117,7 @@ func httpGet(url string) {
     startTime := time.Now()
     resp, err := http.Get(url)
     if err != nil {
-        fmt.Println("HTTP GE T request failed:", err)
+        fmt.Println("HTTP GET request failed:", err)
         return
     }
     defer resp.Body.Close()
@@ -135,6 +135,7 @@ func checkPort(portStr string) bool {
 }
 
 func main() {
+    route := http.NewServeMux()
     target := "8.8.8.8"
     PORT := "8080"
     if len(os.Args) > 1 {
@@ -150,10 +151,9 @@ func main() {
         }
         }()
         
-
-    http.Handle("/metrics", promhttp.Handler())
+    route.Handle("/metrics", promhttp.Handler())
     fmt.Println("Starting server on :"+PORT)
-    if err := http.ListenAndServe(":"+PORT, nil); err != nil {
+    if err := http.ListenAndServe(":"+PORT, route); err != nil {
         fmt.Println("Error starting server:", err)
     }
 }
