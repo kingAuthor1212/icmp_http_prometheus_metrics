@@ -163,5 +163,7 @@ func main() {
         Handler: route,
     }
     logger.Info("Starting server on :"+PORT)
-    server.ListenAndServe()
+    err := server.ListenAndServe()
+    logger.Error(err.Error())
+    os.Exit(1)
 }
