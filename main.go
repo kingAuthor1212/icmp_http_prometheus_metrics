@@ -153,7 +153,11 @@ func main() {
         
     route.Handle("/metrics", promhttp.Handler())
     fmt.Println("Starting server on :"+PORT)
-    if err := http.ListenAndServe(":"+PORT, route); err != nil {
-        fmt.Println("Error starting server:", err)
+
+    server := &http.Server{
+        Addr: ":"+PORT,
+        Handler: route,
     }
+
+    server.ListenAndServe()
 }
