@@ -1,6 +1,6 @@
 groups:
   - name: Count greater than 100
     rules:
-      - alert: countGreaterThan100
+      - alert: countGreaterThan5
         expr: ping_request_count > 5
         for: 10s

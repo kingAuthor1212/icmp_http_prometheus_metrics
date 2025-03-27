@@ -6,6 +6,7 @@ import (
     "net"
     "net/http"
     "os"
+    "log/slog"
     "time"
     "golang.org/x/net/icmp"
     "golang.org/x/net/ipv4"
@@ -34,6 +35,9 @@ var (
         },
         []string{"target"},
     )
+
+    logger = slog.New(slog.NewTextHandler(os.Stdout, nil))
+
 )
 
 // init initializes the metrics for Prometheus monitoring and registers them
@@ -138,6 +142,7 @@ func main() {
     route := http.NewServeMux()
     target := "8.8.8.8"
     PORT := "8080"
+
     if len(os.Args) > 1 {
         target = os.Args[1]
         if len(os.Args)>2 && checkPort(os.Args[2]){PORT = os.Args[2]}
@@ -152,12 +157,11 @@ func main() {
         }()
         
     route.Handle("/metrics", promhttp.Handler())
-    fmt.Println("Starting server on :"+PORT)
-
+    
     server := &http.Server{
         Addr: ":"+PORT,
         Handler: route,
     }
-
+    logger.Info("Starting server on :"+PORT)
     server.ListenAndServe()
 }
