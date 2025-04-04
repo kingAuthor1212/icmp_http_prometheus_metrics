@@ -8,17 +8,22 @@ import (
 
 )
 
-
 func main() {
 
+
+    // get ping address 
     target := flag.String("ping", "8.8.8.8", "Ping Address")
+
+    // get port number
     PORT := flag.String("port", "8080", "Port Address")
     flag.Parse()
 
+    // check if within range of port address
     if !checkPort(*PORT){
       os.Exit(1)
     }
 
+    // gorout with for
     go func() {
         for {
             ping(*target)// Send ICMP ping to the target
@@ -32,7 +37,8 @@ func main() {
         Handler: routes(),
     }
     logger.Info("Starting server on :"+*PORT)
-    err := server.ListenAndServe()
-    logger.Error(err.Error())
-    os.Exit(1)
+    if err := server.ListenAndServe(); err != nil {
+        logger.Error("Failed to start server: " + err.Error())
+        os.Exit(1)
+    }
 }

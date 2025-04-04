@@ -3,9 +3,12 @@ global:
   evaluation_interval: 10s
 
 rule_files:
-  - rules.yml
+  - ./rules/rules.yml
 
 scrape_configs:
+  - job_name: "prometheus"
+    static_configs: 
+      - targets: ["localhost:9090"]
   # scrape for go application
   - job_name: "goApplication"
     static_configs:
