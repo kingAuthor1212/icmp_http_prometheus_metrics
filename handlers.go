@@ -1,16 +1,18 @@
 package main
 
-import(
+import (
+	"fmt"
 	"log"
+	"log/slog"
 	"net"
-	"golang.org/x/net/icmp"
-	"golang.org/x/net/ipv4"
-	"strconv"
-	"time"
 	"net/http"
 	"os"
-	"log/slog"
+	"strconv"
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
+	"golang.org/x/net/icmp"
+	"golang.org/x/net/ipv4"
 )
 
 var (
@@ -101,7 +103,7 @@ func ping(target string) {
     if err == nil {
         icmpPingSuccess.WithLabelValues(target).Set(1)
         icmpPingResponseTime.WithLabelValues(target).Set(duration)
-        log.Println("Ping to",target ,"in", duration, "seconds")
+        fmt.Println("Ping to",target ,"in", duration, "seconds")
     } else {
         icmpPingSuccess.WithLabelValues(target).Set(0)
         log.Println("Ping failed", err)
@@ -125,7 +127,7 @@ func httpGet(url string) {
     defer resp.Body.Close()
 
     duration := time.Since(startTime).Seconds()
-    log.Println("HTTP GET response from",url,"in", duration, "seconds")
+    fmt.Println("HTTP GET response from",url,"in", duration, "seconds")
 }
 
 // check if vaild port

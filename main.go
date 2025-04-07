@@ -8,6 +8,7 @@ import (
 
 )
 
+
 func main() {
 
 
@@ -31,7 +32,7 @@ func main() {
             time.Sleep(2 * time.Second)  // Wait for 2 seconds before the next iteration
         }
         }()
-            
+    // http server instance
     server := &http.Server{
         Addr: ":"+*PORT,
         Handler: routes(),

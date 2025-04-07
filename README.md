@@ -48,15 +48,15 @@ This will create an executable named `icmp_http_prometheus_metrics`.
 To run the application, use the following command:
 
 ```bash
-./icmp_http_prometheus_metrics  <target> <port> 
+./icmp_http_prometheus_metrics  -ping="Ping Address" -port="Port Address" 
 ```
 
-Replace target and port with `hostname or IP address and port nunmber you want` and If no target and port are provided, it defaults to `8.8.8.8` and `8080`.
+Replace ping and port with `hostname or IP address and port nunmber you want` and If no target and port are provided, it defaults to `8.8.8.8` and `8080`.
 
 Example:
 
 ```bash
-./icmp_http_prometheus_metrics 1.1.1.1 9090
+./icmp_http_prometheus_metrics -ping="1.1.1.1" -port="9090"
 ```
 
 The application will start an HTTP server on port provided else `8080` and expose the metrics at `/metrics`.
